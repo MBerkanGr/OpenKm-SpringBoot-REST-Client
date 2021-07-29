@@ -20,13 +20,7 @@ public class SpringBootOpenKmApiApplication {
         });
 		return new RestTemplate();
 	}
-	
-	
-	
 	public static void main(String[] args) {
-		SpringApplication.run(SpringBootOpenKmApiApplication.class, args);
-
-		
+		SpringApplication.run(SpringBootOpenKmApiApplication.class, args);	
 	}
-
 }
