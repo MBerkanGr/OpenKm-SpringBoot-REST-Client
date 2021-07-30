@@ -1,9 +1,11 @@
-
 package com.mehmetberkan.SpringBootOpenKmAPI.api;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -80,7 +82,7 @@ public class DocumentController {
 	
 	@GetMapping("/getVersionHistory")
 	public ResponseEntity<String> getVersionHistory(@RequestParam("docId") String docId) {
-		ResponseEntity<String> result = restTemplate.getForEntity(webUrl+"/getVersionHistory?docId="+docId, String.class, docId);
+		ResponseEntity<String> result = restTemplate.getForEntity(webUrl+"/getVersionHistory?docId="+docId, String.class);
 		System.out.print("getVersionHistory = " + result.getBody());
 		return ResponseEntity.ok("getVersionHistory = " + result.getBody());
 	}
@@ -100,4 +102,48 @@ public class DocumentController {
 		restTemplate.put(webUrl+"/rename?docId="+docId+"&newName="+newName, String.class);
 	}
 	
+	@PutMapping("/copy")
+	public void copy(@RequestParam("docId") String docId,@RequestParam("dstId") String dstId) {
+		restTemplate.put(webUrl+"/copy?docId="+docId+"&dstId="+dstId, String.class);		
+	}
+	
+	@PutMapping("/move")
+	public void move(@RequestParam("docId") String docId,@RequestParam("dstId") String dstId) {
+		restTemplate.put(webUrl+"/move?docId="+docId+"&dstId="+dstId, String.class);
+	}
+	
+	@PutMapping("/purgeVersionHistory")
+	public void purgeVersionHistory(@RequestParam("docId") String docId) {
+		restTemplate.put(webUrl+"/purgeVersionHistory?docId="+docId, String.class);
+	}
+	
+	@PutMapping("/restoreVersion")
+	public void restoreVersion(@RequestParam("docId") String docId, @RequestParam String versionId) {
+		restTemplate.put(webUrl+"/restoreVersion?docId="+docId+"&versionId="+versionId, String.class);
+	}
+	
+	@PutMapping("/cancelCheckout")
+	public void cancelCheckout(@RequestParam("docId") String docId) {
+		restTemplate.put(webUrl+"/cancelCheckout?docId="+docId, String.class);
+	}
+	
+	@DeleteMapping("/delete")
+	public ResponseEntity<String> delete(@RequestParam("docId") String docId) {
+		try {
+			HttpEntity<String> entity = null;
+			ResponseEntity<String> result = restTemplate.exchange(webUrl+"/delete?docId="+docId, HttpMethod.DELETE, entity, String.class);
+
+			if(result.getStatusCodeValue() == 204) {
+				System.out.print("successful operation : " + HttpMethod.DELETE.toString());
+				return ResponseEntity.ok("Successful Operation : "+ HttpMethod.DELETE.toString());
+			}
+			else {
+				System.out.print("Failed : HTTP error code : " + result.getStatusCodeValue());
+				return ResponseEntity.ok("Failed : HTTP error code : " + result.getStatusCodeValue());
+			}
+		}catch (Exception e) {
+			System.out.print("Error : "+e.getMessage());
+			return ResponseEntity.ok(e.getMessage());
+		}	
+	}
 }
