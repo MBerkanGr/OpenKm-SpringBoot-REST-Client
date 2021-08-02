@@ -13,11 +13,16 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.client.RestTemplate;
 
+import com.mehmetberkan.SpringBootOpenKmAPI.business.ResponseCheckService;
+
 @Controller
 @RequestMapping("/document")
 public class DocumentController {
 	
 	String webUrl = "http://localhost:8080/OpenKM/services/rest/document";
+	
+	@Autowired
+	private ResponseCheckService checkManager;
 	
 	@Autowired
 	private RestTemplate restTemplate;
@@ -88,43 +93,99 @@ public class DocumentController {
 	}
 	
 	@PutMapping("/lock")
-	public void lock(@RequestParam("docId") String docId) {
-		restTemplate.put(webUrl+"/lock?docId="+docId , String.class);	
-	}
-	
+	public ResponseEntity<String> lock(@RequestParam("docId") String docId) {
+		try {
+			HttpEntity<String> entity = null;
+			ResponseEntity<String> result = restTemplate.exchange(webUrl+"/lock?docId="+docId , HttpMethod.PUT, entity, String.class);	
+			return ResponseEntity.ok(checkManager.check(result.getStatusCodeValue(), HttpMethod.PUT.toString()));
+		}catch (Exception e) {
+			System.out.print("Error : "+e.getMessage());
+			return ResponseEntity.ok(e.getMessage());
+		}	
+	}	
+			
 	@PutMapping("/unlock")
-	public void unLock(@RequestParam("docId") String docId) {
-		restTemplate.put(webUrl+"/unlock?docId="+docId, String.class);
+	public ResponseEntity<String> unLock(@RequestParam("docId") String docId) {
+		try {
+			HttpEntity<String> entity = null;
+			ResponseEntity<String> result = restTemplate.exchange(webUrl+"/unlock?docId="+docId, HttpMethod.PUT, entity, String.class); 
+			return ResponseEntity.ok(checkManager.check(result.getStatusCodeValue(), HttpMethod.PUT.toString()));
+		}catch (Exception e) {
+			System.out.print("Error : "+e.getMessage());
+			return ResponseEntity.ok(e.getMessage());
+		}		
 	}
 	
 	@PutMapping("/rename")
-	public void rename(@RequestParam("docId") String docId, @RequestParam("newName") String newName) {
-		restTemplate.put(webUrl+"/rename?docId="+docId+"&newName="+newName, String.class);
+	public ResponseEntity<String> rename(@RequestParam("docId") String docId, @RequestParam("newName") String newName) {
+		try {
+			HttpEntity<String> entity = null;
+			ResponseEntity<String> result = restTemplate.exchange(webUrl+"/rename?docId="+docId+"&newName="+newName, HttpMethod.PUT, entity,String.class);
+			return ResponseEntity.ok(checkManager.check(result.getStatusCodeValue(), HttpMethod.PUT.toString()));
+		}catch (Exception e) {
+			System.out.print("Error : "+e.getMessage());
+			return ResponseEntity.ok(e.getMessage());
+		}		
 	}
 	
 	@PutMapping("/copy")
-	public void copy(@RequestParam("docId") String docId,@RequestParam("dstId") String dstId) {
-		restTemplate.put(webUrl+"/copy?docId="+docId+"&dstId="+dstId, String.class);		
+	public ResponseEntity<String> copy(@RequestParam("docId") String docId,@RequestParam("dstId") String dstId) {
+		try {
+			HttpEntity<String> entity = null;	
+			ResponseEntity<String> result = restTemplate.exchange(webUrl+"/copy?docId="+docId+"&dstId="+dstId, HttpMethod.PUT, entity, String.class);	
+			return ResponseEntity.ok(checkManager.check(result.getStatusCodeValue(), HttpMethod.PUT.toString()));
+		}catch (Exception e) {
+			System.out.print("Error : "+e.getMessage());
+			return ResponseEntity.ok(e.getMessage());
+		}		
 	}
 	
 	@PutMapping("/move")
-	public void move(@RequestParam("docId") String docId,@RequestParam("dstId") String dstId) {
-		restTemplate.put(webUrl+"/move?docId="+docId+"&dstId="+dstId, String.class);
+	public ResponseEntity<String> move(@RequestParam("docId") String docId,@RequestParam("dstId") String dstId) {
+		try {
+			HttpEntity<String> entity = null;
+			ResponseEntity<String> result = restTemplate.exchange(webUrl+"/move?docId="+docId+"&dstId="+dstId, HttpMethod.PUT, entity, String.class);
+			return ResponseEntity.ok(checkManager.check(result.getStatusCodeValue(), HttpMethod.PUT.toString()));
+		}catch (Exception e) {
+			System.out.print("Error : "+e.getMessage());
+			return ResponseEntity.ok(e.getMessage());
+		}
 	}
 	
 	@PutMapping("/purgeVersionHistory")
-	public void purgeVersionHistory(@RequestParam("docId") String docId) {
-		restTemplate.put(webUrl+"/purgeVersionHistory?docId="+docId, String.class);
+	public ResponseEntity<String> purgeVersionHistory(@RequestParam("docId") String docId) {
+		try {
+			HttpEntity<String> entity = null;
+			ResponseEntity<String> result = restTemplate.exchange(webUrl+"/purgeVersionHistory?docId="+docId, HttpMethod.PUT, entity, String.class);
+			return ResponseEntity.ok(checkManager.check(result.getStatusCodeValue(), HttpMethod.PUT.toString()));
+		}catch (Exception e) {
+			System.out.print("Error : "+e.getMessage());
+			return ResponseEntity.ok(e.getMessage());
+		}		
 	}
 	
 	@PutMapping("/restoreVersion")
-	public void restoreVersion(@RequestParam("docId") String docId, @RequestParam String versionId) {
-		restTemplate.put(webUrl+"/restoreVersion?docId="+docId+"&versionId="+versionId, String.class);
+	public ResponseEntity<String> restoreVersion(@RequestParam("docId") String docId, @RequestParam String versionId) {
+		try {
+			HttpEntity<String> entity = null;
+			ResponseEntity<String> result = restTemplate.exchange(webUrl+"/restoreVersion?docId="+docId+"&versionId="+versionId, HttpMethod.PUT, entity, String.class);
+			return ResponseEntity.ok(checkManager.check(result.getStatusCodeValue(), HttpMethod.PUT.toString()));
+		}catch (Exception e) {
+			System.out.print("Error : "+e.getMessage());
+			return ResponseEntity.ok(e.getMessage());
+		}
 	}
 	
 	@PutMapping("/cancelCheckout")
-	public void cancelCheckout(@RequestParam("docId") String docId) {
-		restTemplate.put(webUrl+"/cancelCheckout?docId="+docId, String.class);
+	public ResponseEntity<String> cancelCheckout(@RequestParam("docId") String docId) {
+		try {
+			HttpEntity<String> entity = null;
+			ResponseEntity<String> result = restTemplate.exchange(webUrl+"/cancelCheckout?docId="+docId, HttpMethod.PUT, entity, String.class);
+			return ResponseEntity.ok(checkManager.check(result.getStatusCodeValue(), HttpMethod.PUT.toString()));
+		}catch (Exception e) {
+			System.out.print("Error : "+e.getMessage());
+			return ResponseEntity.ok(e.getMessage());
+		}
 	}
 	
 	@DeleteMapping("/delete")
@@ -132,15 +193,7 @@ public class DocumentController {
 		try {
 			HttpEntity<String> entity = null;
 			ResponseEntity<String> result = restTemplate.exchange(webUrl+"/delete?docId="+docId, HttpMethod.DELETE, entity, String.class);
-
-			if(result.getStatusCodeValue() == 204) {
-				System.out.print("successful operation : " + HttpMethod.DELETE.toString());
-				return ResponseEntity.ok("Successful Operation : "+ HttpMethod.DELETE.toString());
-			}
-			else {
-				System.out.print("Failed : HTTP error code : " + result.getStatusCodeValue());
-				return ResponseEntity.ok("Failed : HTTP error code : " + result.getStatusCodeValue());
-			}
+			return ResponseEntity.ok(checkManager.check(result.getStatusCodeValue(), HttpMethod.DELETE.toString()));
 		}catch (Exception e) {
 			System.out.print("Error : "+e.getMessage());
 			return ResponseEntity.ok(e.getMessage());
