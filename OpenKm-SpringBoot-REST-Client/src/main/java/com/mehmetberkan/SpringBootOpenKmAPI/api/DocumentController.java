@@ -23,13 +23,12 @@ public class DocumentController {
 	
 	@Autowired
 	private ResponseCheckService checkManager;
-	
+
 	@Autowired
 	private RestTemplate restTemplate;
 	
 	@GetMapping("/getPath/{id}")
-	public ResponseEntity<String> getPath(@PathVariable String docId) {
-		
+	public ResponseEntity<String> getPath(@PathVariable String docId) {	
 		ResponseEntity<String> result = restTemplate.getForEntity(webUrl + "/getPath/"+docId, String.class);
 		System.out.print("Path = " + result.getBody());
 		return ResponseEntity.ok("Path = " + result.getBody());
@@ -43,8 +42,7 @@ public class DocumentController {
 	}
 	
 	@GetMapping("/isLocked")
-	public ResponseEntity<String> isLocked(@RequestParam("docId") String docId) {
-		
+	public ResponseEntity<String> isLocked(@RequestParam("docId") String docId) {	
 		ResponseEntity<String> result = restTemplate.getForEntity(webUrl + "/isLocked?docId="+docId, String.class);
 		System.out.print("isLocked = " + result.getBody());
 		return ResponseEntity.ok("isLocked = " + result.getBody());
