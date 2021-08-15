@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.client.RestTemplate;
 
+import com.mehmetberkan.SpringBootOpenKmAPI.business.FindDocumentsService;
 import com.mehmetberkan.SpringBootOpenKmAPI.business.ResponseCheckService;
 
 @Controller
@@ -23,6 +24,9 @@ public class DocumentController {
 	
 	@Autowired
 	private ResponseCheckService checkManager;
+	
+	@Autowired
+	private FindDocumentsService findManager;
 
 	@Autowired
 	private RestTemplate restTemplate;
@@ -32,6 +36,14 @@ public class DocumentController {
 		ResponseEntity<String> result = restTemplate.getForEntity(webUrl + "/getPath/"+docId, String.class);
 		System.out.print("Path = " + result.getBody());
 		return ResponseEntity.ok("Path = " + result.getBody());
+	}
+	
+	@GetMapping("/getDocumentsInFolder")
+	public ResponseEntity<String> getDocumentsInFolder(@RequestParam("folderId") String folderId) {
+		String path = "http://localhost:8080/OpenKM/services/rest/folder/getPath/";
+		ResponseEntity<String> result = restTemplate.getForEntity(path+folderId, String.class);
+		System.out.print(result.getBody());
+		return ResponseEntity.ok(findManager.findDocument(result.getBody()));
 	}
 	
 	@GetMapping("/getProperties")
@@ -197,4 +209,5 @@ public class DocumentController {
 			return ResponseEntity.ok(e.getMessage());
 		}	
 	}
+	
 }

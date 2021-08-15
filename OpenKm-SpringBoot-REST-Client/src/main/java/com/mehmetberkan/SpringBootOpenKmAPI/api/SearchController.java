@@ -19,7 +19,7 @@ public class SearchController {
 	RestTemplate restTemplate;
 	
 	@GetMapping("/find")
-	public ResponseEntity<String> find(@RequestParam("find") String find, @RequestParam("selection") String selection){
+	public ResponseEntity<String> find(@RequestParam("find") String find, @RequestParam("selection") String selection) {
 		ResponseEntity<String> result = restTemplate.getForEntity(webUrl+"/find?"+selection+"="+find, String.class);
 		return ResponseEntity.ok(result.getBody());
 	}
